@@ -1,0 +1,1780 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSKT Tutoring | Student Portal</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+        --bg: #08090d;
+        --panel: #11131a;
+        --panel2: #171922;
+        --border: rgba(255,255,255,0.08);
+        --text: #f5f7fb;
+        --muted: #8e94a3;
+        --accent: #7c5cff;
+        --accent2: #9a82ff;
+        --green: #35d07f;
+        --red: #ff5c6c;
+        --yellow: #ffc857;
+    }
+
+    body {
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+                     BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background:
+            radial-gradient(circle at 15% 10%, rgba(124,92,255,.14), transparent 30%),
+            radial-gradient(circle at 90% 90%, rgba(53,208,127,.07), transparent 30%),
+            var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+    }
+
+    button, input {
+        font: inherit;
+    }
+
+    /* ================= LOGIN ================= */
+
+    #loginScreen {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 25px;
+    }
+
+    .login-container {
+        width: 100%;
+        max-width: 430px;
+        background: rgba(17,19,26,.88);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 30px 80px rgba(0,0,0,.45);
+        backdrop-filter: blur(20px);
+        animation: fadeUp .6s ease;
+    }
+
+    .logo {
+        width: 58px;
+        height: 58px;
+        background: linear-gradient(135deg, var(--accent), #b36cff);
+        border-radius: 17px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 21px;
+        font-weight: 900;
+        margin-bottom: 25px;
+        box-shadow: 0 12px 35px rgba(124,92,255,.3);
+    }
+
+    .login-container h1 {
+        font-size: 31px;
+        letter-spacing: -1px;
+        margin-bottom: 8px;
+    }
+
+    .login-container p {
+        color: var(--muted);
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .input-group {
+        margin-bottom: 17px;
+    }
+
+    .input-group label {
+        display: block;
+        font-size: 13px;
+        color: #b7bbc7;
+        margin-bottom: 8px;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 14px 15px;
+        background: #0b0d12;
+        color: white;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        outline: none;
+        transition: .2s;
+    }
+
+    .input-group input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(124,92,255,.12);
+    }
+
+    .login-btn {
+        width: 100%;
+        border: none;
+        padding: 15px;
+        border-radius: 13px;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        background: linear-gradient(135deg, var(--accent), #9b72ff);
+        transition: .2s;
+        margin-top: 8px;
+    }
+
+    .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(124,92,255,.25);
+    }
+
+    .login-error {
+        display: none;
+        margin-top: 15px;
+        padding: 11px;
+        border-radius: 10px;
+        background: rgba(255,92,108,.1);
+        border: 1px solid rgba(255,92,108,.2);
+        color: #ff8b97;
+        font-size: 13px;
+    }
+
+    .test-accounts {
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+    }
+
+    .test-accounts small {
+        color: var(--muted);
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .test-account-row {
+        font-size: 12px;
+        color: #b9bdc9;
+        line-height: 1.8;
+    }
+
+    /* ================= APP ================= */
+
+    #app {
+        display: none;
+        min-height: 100vh;
+    }
+
+    .layout {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 250px;
+        border-right: 1px solid var(--border);
+        background: rgba(10,11,16,.85);
+        padding: 25px 18px;
+        position: fixed;
+        height: 100vh;
+        left: 0;
+        top: 0;
+        z-index: 10;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 5px 8px 28px;
+        font-weight: 800;
+        font-size: 18px;
+    }
+
+    .brand-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--accent), #b36cff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+    }
+
+    .nav-title {
+        color: #626775;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.3px;
+        padding: 0 10px 10px;
+    }
+
+    .nav-item {
+        width: 100%;
+        border: none;
+        background: transparent;
+        color: #979dac;
+        padding: 12px;
+        border-radius: 11px;
+        text-align: left;
+        cursor: pointer;
+        margin-bottom: 4px;
+        transition: .2s;
+        font-weight: 600;
+    }
+
+    .nav-item:hover {
+        background: rgba(255,255,255,.04);
+        color: white;
+    }
+
+    .nav-item.active {
+        color: white;
+        background: rgba(124,92,255,.15);
+    }
+
+    .student-card {
+        position: absolute;
+        bottom: 20px;
+        left: 18px;
+        right: 18px;
+        padding: 13px;
+        background: rgba(255,255,255,.035);
+        border: 1px solid var(--border);
+        border-radius: 13px;
+    }
+
+    .student-avatar {
+        width: 34px;
+        height: 34px;
+        background: linear-gradient(135deg, #272b39, #3b4050);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 13px;
+    }
+
+    .student-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .student-name-small {
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .student-status {
+        color: var(--green);
+        font-size: 10px;
+        margin-top: 2px;
+    }
+
+    .logout {
+        margin-top: 12px;
+        width: 100%;
+        border: none;
+        background: transparent;
+        color: #7f8491;
+        cursor: pointer;
+        text-align: left;
+        font-size: 12px;
+        padding: 4px;
+    }
+
+    .logout:hover {
+        color: var(--red);
+    }
+
+    .main {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+        padding: 40px;
+        max-width: 1500px;
+    }
+
+    .page {
+        display: none;
+        animation: fadeUp .35s ease;
+    }
+
+    .page.active {
+        display: block;
+    }
+
+    /* ================= DASHBOARD ================= */
+
+    .welcome {
+        margin-bottom: 32px;
+    }
+
+    .welcome .eyebrow {
+        color: var(--accent2);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    .welcome h1 {
+        font-size: clamp(30px, 4vw, 46px);
+        letter-spacing: -2px;
+        margin-bottom: 8px;
+    }
+
+    .welcome p {
+        color: var(--muted);
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 25px;
+    }
+
+    .stat-card {
+        background: rgba(17,19,26,.75);
+        border: 1px solid var(--border);
+        padding: 22px;
+        border-radius: 18px;
+    }
+
+    .stat-label {
+        color: var(--muted);
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    .stat-value {
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1.4fr .8fr;
+        gap: 18px;
+    }
+
+    .panel {
+        background: rgba(17,19,26,.75);
+        border: 1px solid var(--border);
+        border-radius: 19px;
+        padding: 24px;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .panel-header h2 {
+        font-size: 18px;
+    }
+
+    .panel-header span {
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .homework-preview {
+        padding: 16px;
+        background: rgba(255,255,255,.025);
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        margin-bottom: 10px;
+    }
+
+    .homework-preview strong {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    .homework-preview span {
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .quick-quiz {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .quiz-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        background: rgba(124,92,255,.13);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 18px;
+    }
+
+    .primary-btn {
+        border: none;
+        background: linear-gradient(135deg,var(--accent),#9b72ff);
+        color: white;
+        padding: 12px 17px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 700;
+        margin-top: 18px;
+    }
+
+    .primary-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    /* ================= HOMEWORK ================= */
+
+    .section-heading {
+        margin-bottom: 25px;
+    }
+
+    .section-heading h1 {
+        font-size: 32px;
+        letter-spacing: -1px;
+        margin-bottom: 7px;
+    }
+
+    .section-heading p {
+        color: var(--muted);
+    }
+
+    .homework-grid {
+        display: grid;
+        gap: 15px;
+    }
+
+    .assignment {
+        background: rgba(17,19,26,.8);
+        border: 1px solid var(--border);
+        border-radius: 17px;
+        padding: 21px;
+    }
+
+    .assignment-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .assignment h3 {
+        margin-bottom: 7px;
+    }
+
+    .assignment-desc {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .due {
+        white-space: nowrap;
+        font-size: 11px;
+        padding: 7px 10px;
+        border-radius: 8px;
+        height: fit-content;
+        background: rgba(255,200,87,.1);
+        color: var(--yellow);
+    }
+
+    .math-box {
+        margin-top: 16px;
+        padding: 15px;
+        background: #0b0d12;
+        border: 1px solid var(--border);
+        border-radius: 11px;
+        color: #d8dbe5;
+        line-height: 1.9;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+    }
+
+    /* ================= QUIZ ================= */
+
+    .quiz-container {
+        max-width: 850px;
+    }
+
+    .quiz-progress {
+        height: 6px;
+        background: #1d2029;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    .quiz-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg,var(--accent),#b06cff);
+        width: 0%;
+        transition: .3s;
+    }
+
+    .quiz-top {
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 12px;
+        margin-bottom: 16px;
+    }
+
+    .question-card {
+        background: rgba(17,19,26,.85);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 30px;
+    }
+
+    .question-number {
+        color: var(--accent2);
+        font-size: 12px;
+        font-weight: 800;
+        margin-bottom: 13px;
+    }
+
+    .question-text {
+        font-size: 22px;
+        line-height: 1.4;
+        font-weight: 700;
+        margin-bottom: 25px;
+    }
+
+    .options {
+        display: grid;
+        gap: 10px;
+    }
+
+    .option {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 14px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,.02);
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    .option:hover {
+        background: rgba(124,92,255,.07);
+        border-color: rgba(124,92,255,.4);
+    }
+
+    .option.selected {
+        background: rgba(124,92,255,.14);
+        border-color: var(--accent);
+    }
+
+    .option-letter {
+        width: 31px;
+        height: 31px;
+        border-radius: 8px;
+        background: #20232d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 12px;
+        flex-shrink: 0;
+    }
+
+    .quiz-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+
+    .secondary-btn {
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,.03);
+        color: white;
+        padding: 11px 17px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .secondary-btn:hover {
+        background: rgba(255,255,255,.07);
+    }
+
+    .finish-btn {
+        border: none;
+        background: var(--green);
+        color: #07140d;
+        padding: 11px 19px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 800;
+    }
+
+    /* ================= RESULTS ================= */
+
+    .result-summary {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .result-stat {
+        background: rgba(17,19,26,.8);
+        border: 1px solid var(--border);
+        padding: 22px;
+        border-radius: 17px;
+    }
+
+    .result-stat span {
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .result-stat strong {
+        display: block;
+        font-size: 30px;
+        margin-top: 7px;
+    }
+
+    .mistakes {
+        display: grid;
+        gap: 12px;
+    }
+
+    .mistake {
+        background: rgba(17,19,26,.8);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        padding: 19px;
+    }
+
+    .mistake.correct {
+        border-color: rgba(53,208,127,.2);
+    }
+
+    .mistake.wrong {
+        border-color: rgba(255,92,108,.2);
+    }
+
+    .mistake-question {
+        font-weight: 700;
+        margin-bottom: 13px;
+    }
+
+    .answer-line {
+        font-size: 13px;
+        margin-top: 6px;
+        color: var(--muted);
+    }
+
+    .answer-line b {
+        color: white;
+    }
+
+    .correct-answer {
+        color: var(--green);
+    }
+
+    .wrong-answer {
+        color: var(--red);
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--muted);
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media(max-width: 850px) {
+        .sidebar {
+            width: 75px;
+            padding: 20px 10px;
+        }
+
+        .brand span,
+        .nav-title,
+        .nav-item span,
+        .student-info,
+        .logout {
+            display: none;
+        }
+
+        .brand {
+            justify-content: center;
+            padding-bottom: 25px;
+        }
+
+        .nav-item {
+            text-align: center;
+            padding: 13px 5px;
+        }
+
+        .student-card {
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main {
+            margin-left: 75px;
+            width: calc(100% - 75px);
+            padding: 25px;
+        }
+
+        .stats,
+        .dashboard-grid,
+        .result-summary {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media(max-width: 550px) {
+        .main {
+            padding: 18px;
+        }
+
+        .login-container {
+            padding: 28px;
+        }
+
+        .question-card {
+            padding: 20px;
+        }
+
+        .question-text {
+            font-size: 19px;
+        }
+    }
+
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- ================= LOGIN ================= -->
+
+<div id="loginScreen">
+
+    <div class="login-container">
+
+        <div class="logo">R</div>
+
+        <h1>Welcome back.</h1>
+        <p>
+            Sign in to your RSKT Tutoring student portal
+            to access your homework, quizzes and results.
+        </p>
+
+        <form id="loginForm">
+
+            <div class="input-group">
+                <label>Username</label>
+                <input id="username" type="text" placeholder="Enter username" required>
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input id="password" type="password" placeholder="Enter password" required>
+            </div>
+
+            <button class="login-btn" type="submit">
+                Sign in
+            </button>
+
+            <div id="loginError" class="login-error">
+                Incorrect username or password.
+            </div>
+
+        </form>
+
+        <div class="test-accounts">
+            <small>Test accounts</small>
+            <div class="test-account-row">
+                test1 / rskt123
+            </div>
+            <div class="test-account-row">
+                test2 / rskt456
+            </div>
+            <div class="test-account-row">
+                test3 / rskt789
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= APPLICATION ================= -->
+
+<div id="app">
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">R</div>
+            <span>RSKT Tutoring</span>
+        </div>
+
+        <div class="nav-title">STUDENT PORTAL</div>
+
+        <button class="nav-item active" data-page="dashboard">
+            🏠 <span>Dashboard</span>
+        </button>
+
+        <button class="nav-item" data-page="homework">
+            📚 <span>Homework</span>
+        </button>
+
+        <button class="nav-item" data-page="quiz">
+            🧠 <span>Quiz</span>
+        </button>
+
+        <button class="nav-item" data-page="results">
+            📊 <span>Quiz Results</span>
+        </button>
+
+        <div class="student-card">
+
+            <div class="student-info">
+
+                <div class="student-avatar" id="avatar">
+                    T1
+                </div>
+
+                <div>
+                    <div class="student-name-small" id="sidebarName">
+                        Test 1
+                    </div>
+
+                    <div class="student-status">
+                        ● Student
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="logout" onclick="logout()">
+                Log out
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <!-- DASHBOARD -->
+
+        <section id="dashboard" class="page active">
+
+            <div class="welcome">
+
+                <div class="eyebrow">
+                    RSKT Student Portal
+                </div>
+
+                <h1>
+                    Hey, <span id="welcomeName">Test 1</span>.
+                </h1>
+
+                <p>
+                    Here's what's waiting for you today.
+                </p>
+
+            </div>
+
+            <div class="stats">
+
+                <div class="stat-card">
+                    <div class="stat-label">HOMEWORK</div>
+                    <div class="stat-value">3</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">QUIZ QUESTIONS</div>
+                    <div class="stat-value">20</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">LATEST SCORE</div>
+                    <div class="stat-value" id="dashboardScore">—</div>
+                </div>
+
+            </div>
+
+            <div class="dashboard-grid">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>Current homework</h2>
+                        <span>Maths</span>
+                    </div>
+
+                    <div class="homework-preview">
+                        <strong>Algebra Fundamentals</strong>
+                        <span>10 questions · Due Friday</span>
+                    </div>
+
+                    <div class="homework-preview">
+                        <strong>Linear Equations</strong>
+                        <span>8 questions · Due Monday</span>
+                    </div>
+
+                    <div class="homework-preview">
+                        <strong>Geometry Challenge</strong>
+                        <span>12 questions · Due Wednesday</span>
+                    </div>
+
+                </div>
+
+                <div class="panel quick-quiz">
+
+                    <div>
+
+                        <div class="quiz-icon">
+                            🧠
+                        </div>
+
+                        <h2>Maths Quiz</h2>
+
+                        <p style="color:var(--muted);margin-top:8px;line-height:1.6;font-size:13px;">
+                            Test your maths skills with 20 multiple-choice questions.
+                        </p>
+
+                    </div>
+
+                    <button class="primary-btn" onclick="openPage('quiz')">
+                        Start quiz →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- HOMEWORK -->
+
+        <section id="homework" class="page">
+
+            <div class="section-heading">
+                <h1>Homework</h1>
+                <p>Complete your current maths assignments.</p>
+            </div>
+
+            <div class="homework-grid">
+
+                <div class="assignment">
+
+                    <div class="assignment-top">
+
+                        <div>
+                            <h3>01 · Algebra Fundamentals</h3>
+                            <p class="assignment-desc">
+                                Simplify expressions and solve basic algebraic equations.
+                            </p>
+                        </div>
+
+                        <div class="due">Due Friday</div>
+
+                    </div>
+
+                    <div class="math-box">
+                        1. Simplify: 3x + 5x − 2<br>
+                        2. Solve: 2x + 7 = 19<br>
+                        3. Expand: 4(x + 3)<br>
+                        4. Factorise: x² + 5x + 6<br>
+                        5. Solve: 3x − 8 = 16
+                    </div>
+
+                </div>
+
+
+                <div class="assignment">
+
+                    <div class="assignment-top">
+
+                        <div>
+                            <h3>02 · Linear Equations</h3>
+                            <p class="assignment-desc">
+                                Solve each equation and show your working.
+                            </p>
+                        </div>
+
+                        <div class="due">Due Monday</div>
+
+                    </div>
+
+                    <div class="math-box">
+                        1. 5x + 4 = 29<br>
+                        2. 7x − 9 = 33<br>
+                        3. 2(x + 4) = 18<br>
+                        4. 4x + 12 = 2x + 30<br>
+                        5. 9x − 5 = 4x + 20
+                    </div>
+
+                </div>
+
+
+                <div class="assignment">
+
+                    <div class="assignment-top">
+
+                        <div>
+                            <h3>03 · Geometry Challenge</h3>
+                            <p class="assignment-desc">
+                                Find missing angles, areas and lengths.
+                            </p>
+                        </div>
+
+                        <div class="due">Due Wednesday</div>
+
+                    </div>
+
+                    <div class="math-box">
+                        1. Find the area of a rectangle: 12cm × 7cm<br>
+                        2. A triangle has base 10cm and height 8cm. Find its area.<br>
+                        3. Find x if angles are 65°, 45° and x°.<br>
+                        4. Find the circumference of a circle with radius 5cm.<br>
+                        5. A square has an area of 144cm². Find its side length.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUIZ -->
+
+        <section id="quiz" class="page">
+
+            <div class="section-heading">
+                <h1>Maths Quiz</h1>
+                <p>20 questions · Multiple choice · Take your time.</p>
+            </div>
+
+            <div class="quiz-container">
+
+                <div class="quiz-progress">
+                    <div id="progressBar" class="quiz-progress-bar"></div>
+                </div>
+
+                <div class="quiz-top">
+                    <span id="questionCounter">Question 1 of 20</span>
+                    <span id="answeredCounter">0 answered</span>
+                </div>
+
+                <div class="question-card">
+
+                    <div class="question-number" id="questionNumber">
+                        QUESTION 01
+                    </div>
+
+                    <div class="question-text" id="questionText"></div>
+
+                    <div class="options" id="options"></div>
+
+                </div>
+
+                <div class="quiz-navigation">
+
+                    <button
+                        class="secondary-btn"
+                        onclick="previousQuestion()">
+                        ← Previous
+                    </button>
+
+                    <button
+                        id="nextButton"
+                        class="primary-btn"
+                        onclick="nextQuestion()">
+                        Next →
+                    </button>
+
+                </div>
+
+                <div style="text-align:right;">
+                    <button
+                        class="finish-btn"
+                        onclick="finishQuiz()">
+                        Save & Finish
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RESULTS -->
+
+        <section id="results" class="page">
+
+            <div class="section-heading">
+                <h1>Quiz Results</h1>
+                <p>Review your latest quiz attempt and mistakes.</p>
+            </div>
+
+            <div id="resultsContent">
+
+                <div class="no-results">
+                    <h2 style="color:white;margin-bottom:8px;">
+                        No quiz completed yet
+                    </h2>
+
+                    <p>
+                        Complete the maths quiz to see your results here.
+                    </p>
+
+                    <button
+                        class="primary-btn"
+                        onclick="openPage('quiz')">
+                        Start quiz
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* ================= ACCOUNTS ================= */
+
+const accounts = {
+    test1: {
+        password: "rskt123",
+        name: "Test 1"
+    },
+
+    test2: {
+        password: "rskt456",
+        name: "Test 2"
+    },
+
+    test3: {
+        password: "rskt789",
+        name: "Test 3"
+    }
+};
+
+let currentUser = null;
+
+
+/* ================= QUIZ QUESTIONS ================= */
+
+const questions = [
+
+    {
+        q: "What is 7 × 8?",
+        options: ["54", "56", "64", "48"],
+        answer: 1
+    },
+
+    {
+        q: "Solve: 3x + 5 = 20",
+        options: ["x = 3", "x = 4", "x = 5", "x = 6"],
+        answer: 2
+    },
+
+    {
+        q: "What is 15% of 200?",
+        options: ["20", "25", "30", "35"],
+        answer: 2
+    },
+
+    {
+        q: "What is the area of a rectangle with length 9cm and width 4cm?",
+        options: ["13cm²", "26cm²", "36cm²", "40cm²"],
+        answer: 2
+    },
+
+    {
+        q: "What is √144?",
+        options: ["10", "11", "12", "14"],
+        answer: 2
+    },
+
+    {
+        q: "Simplify: 4x + 3x − 2",
+        options: ["7x − 2", "12x − 2", "7x + 2", "x + 1"],
+        answer: 0
+    },
+
+    {
+        q: "What is 2⁵?",
+        options: ["10", "16", "25", "32"],
+        answer: 3
+    },
+
+    {
+        q: "A triangle has angles 50° and 60°. What is the third angle?",
+        options: ["60°", "70°", "80°", "90°"],
+        answer: 1
+    },
+
+    {
+        q: "What is 3/4 expressed as a decimal?",
+        options: ["0.25", "0.5", "0.75", "0.8"],
+        answer: 2
+    },
+
+    {
+        q: "Solve: 5x = 45",
+        options: ["7", "8", "9", "10"],
+        answer: 2
+    },
+
+    {
+        q: "What is the perimeter of a square with side length 7cm?",
+        options: ["14cm", "21cm", "28cm", "49cm"],
+        answer: 2
+    },
+
+    {
+        q: "Which number is prime?",
+        options: ["21", "27", "29", "33"],
+        answer: 2
+    },
+
+    {
+        q: "What is 2.5 × 4?",
+        options: ["8", "9", "10", "12"],
+        answer: 2
+    },
+
+    {
+        q: "Simplify: 6(a + 2)",
+        options: ["6a + 2", "6a + 8", "6a + 12", "a + 12"],
+        answer: 2
+    },
+
+    {
+        q: "What is the mean of 4, 6, 8 and 10?",
+        options: ["6", "7", "8", "9"],
+        answer: 1
+    },
+
+    {
+        q: "If x = 4, what is x² + 3x?",
+        options: ["16", "20", "28", "32"],
+        answer: 2
+    },
+
+    {
+        q: "What is 3/5 of 50?",
+        options: ["20", "25", "30", "35"],
+        answer: 2
+    },
+
+    {
+        q: "A straight angle measures:",
+        options: ["90°", "120°", "180°", "360°"],
+        answer: 2
+    },
+
+    {
+        q: "What is 11²?",
+        options: ["111", "121", "131", "144"],
+        answer: 1
+    },
+
+    {
+        q: "Solve: 2x − 6 = 14",
+        options: ["x = 8", "x = 9", "x = 10", "x = 12"],
+        answer: 2
+    }
+
+];
+
+
+/* ================= QUIZ STATE ================= */
+
+let currentQuestion = 0;
+let selectedAnswers = new Array(questions.length).fill(null);
+let lastResult = null;
+
+
+/* ================= LOGIN ================= */
+
+document
+.getElementById("loginForm")
+.addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const username =
+        document.getElementById("username").value
+        .trim()
+        .toLowerCase();
+
+    const password =
+        document.getElementById("password").value;
+
+    const account = accounts[username];
+
+    if (account && account.password === password) {
+
+        currentUser = username;
+
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("app").style.display = "block";
+
+        document.getElementById("welcomeName").textContent =
+            account.name;
+
+        document.getElementById("sidebarName").textContent =
+            account.name;
+
+        document.getElementById("avatar").textContent =
+            account.name.replace(" ", "").substring(0,2).toUpperCase();
+
+        loadSavedResult();
+
+        openPage("dashboard");
+
+    } else {
+
+        const error =
+            document.getElementById("loginError");
+
+        error.style.display = "block";
+
+    }
+
+});
+
+
+/* ================= NAVIGATION ================= */
+
+document
+.querySelectorAll(".nav-item")
+.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        openPage(button.dataset.page);
+
+    });
+
+});
+
+
+function openPage(page) {
+
+    document
+    .querySelectorAll(".page")
+    .forEach(p => p.classList.remove("active"));
+
+    document
+    .getElementById(page)
+    .classList.add("active");
+
+    document
+    .querySelectorAll(".nav-item")
+    .forEach(button => {
+
+        button.classList.toggle(
+            "active",
+            button.dataset.page === page
+        );
+
+    });
+
+    if (page === "quiz") {
+        renderQuestion();
+    }
+
+    if (page === "results") {
+        renderResults();
+    }
+
+    window.scrollTo(0,0);
+}
+
+
+/* ================= QUIZ ================= */
+
+function renderQuestion() {
+
+    const question = questions[currentQuestion];
+
+    document.getElementById("questionNumber")
+        .textContent =
+        `QUESTION ${String(currentQuestion + 1).padStart(2,"0")}`;
+
+    document.getElementById("questionCounter")
+        .textContent =
+        `Question ${currentQuestion + 1} of ${questions.length}`;
+
+    document.getElementById("questionText")
+        .textContent = question.q;
+
+    const optionsContainer =
+        document.getElementById("options");
+
+    optionsContainer.innerHTML = "";
+
+    const letters = ["A","B","C","D"];
+
+    question.options.forEach((option,index) => {
+
+        const div = document.createElement("div");
+
+        div.className = "option";
+
+        if (selectedAnswers[currentQuestion] === index) {
+            div.classList.add("selected");
+        }
+
+        div.innerHTML = `
+            <div class="option-letter">
+                ${letters[index]}
+            </div>
+            <div>${option}</div>
+        `;
+
+        div.onclick = () => selectAnswer(index);
+
+        optionsContainer.appendChild(div);
+
+    });
+
+    const answered =
+        selectedAnswers.filter(a => a !== null).length;
+
+    document.getElementById("answeredCounter")
+        .textContent =
+        `${answered} answered`;
+
+    document.getElementById("progressBar")
+        .style.width =
+        `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+    document.getElementById("nextButton")
+        .textContent =
+        currentQuestion === questions.length - 1
+        ? "Review →"
+        : "Next →";
+}
+
+
+function selectAnswer(index) {
+
+    selectedAnswers[currentQuestion] = index;
+
+    renderQuestion();
+}
+
+
+function nextQuestion() {
+
+    if (currentQuestion < questions.length - 1) {
+
+        currentQuestion++;
+
+        renderQuestion();
+
+    } else {
+
+        alert(
+            "You are on the final question. Click 'Save & Finish' to submit your quiz."
+        );
+
+    }
+
+}
+
+
+function previousQuestion() {
+
+    if (currentQuestion > 0) {
+
+        currentQuestion--;
+
+        renderQuestion();
+
+    }
+
+}
+
+
+/* ================= FINISH QUIZ ================= */
+
+function finishQuiz() {
+
+    const unanswered =
+        selectedAnswers.filter(a => a === null).length;
+
+    if (unanswered > 0) {
+
+        const confirmFinish =
+            confirm(
+                `You have ${unanswered} unanswered question(s). Finish anyway?`
+            );
+
+        if (!confirmFinish) return;
+
+    }
+
+    let score = 0;
+
+    questions.forEach((question,index) => {
+
+        if (selectedAnswers[index] === question.answer) {
+            score++;
+        }
+
+    });
+
+    lastResult = {
+        score: score,
+        answers: [...selectedAnswers],
+        date: new Date().toLocaleString()
+    };
+
+    localStorage.setItem(
+        "rskt_result_" + currentUser,
+        JSON.stringify(lastResult)
+    );
+
+    document.getElementById("dashboardScore")
+        .textContent =
+        `${score}/${questions.length}`;
+
+    alert(
+        `Quiz saved!\n\nYour score: ${score}/${questions.length}`
+    );
+
+    openPage("results");
+}
+
+
+/* ================= RESULTS ================= */
+
+function loadSavedResult() {
+
+    const saved =
+        localStorage.getItem(
+            "rskt_result_" + currentUser
+        );
+
+    if (saved) {
+
+        lastResult = JSON.parse(saved);
+
+        document.getElementById("dashboardScore")
+            .textContent =
+            `${lastResult.score}/${questions.length}`;
+
+    } else {
+
+        lastResult = null;
+
+        document.getElementById("dashboardScore")
+            .textContent = "—";
+
+    }
+
+}
+
+
+function renderResults() {
+
+    const container =
+        document.getElementById("resultsContent");
+
+    if (!lastResult) {
+
+        container.innerHTML = `
+            <div class="no-results">
+                <h2 style="color:white;margin-bottom:8px;">
+                    No quiz completed yet
+                </h2>
+
+                <p>
+                    Complete the maths quiz to see your results here.
+                </p>
+
+                <button
+                    class="primary-btn"
+                    onclick="openPage('quiz')">
+                    Start quiz
+                </button>
+            </div>
+        `;
+
+        return;
+
+    }
+
+    const score = lastResult.score;
+
+    const percentage =
+        Math.round((score / questions.length) * 100);
+
+    let mistakesHTML = "";
+
+    questions.forEach((question,index) => {
+
+        const userAnswer =
+            lastResult.answers[index];
+
+        const correctAnswer =
+            question.answer;
+
+        const isCorrect =
+            userAnswer === correctAnswer;
+
+        const letters = ["A","B","C","D"];
+
+        let userText =
+            userAnswer === null
+            ? "Not answered"
+            : `${letters[userAnswer]}. ${question.options[userAnswer]}`;
+
+        let correctText =
+            `${letters[correctAnswer]}. ${question.options[correctAnswer]}`;
+
+        mistakesHTML += `
+
+            <div class="mistake ${isCorrect ? "correct" : "wrong"}">
+
+                <div class="mistake-question">
+                    ${index + 1}. ${question.q}
+                </div>
+
+                <div class="answer-line">
+                    Your answer:
+                    <b class="${isCorrect ? "correct-answer" : "wrong-answer"}">
+                        ${userText}
+                    </b>
+                </div>
+
+                <div class="answer-line">
+                    Correct answer:
+                    <b class="correct-answer">
+                        ${correctText}
+                    </b>
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    container.innerHTML = `
+
+        <div class="result-summary">
+
+            <div class="result-stat">
+                <span>SCORE</span>
+                <strong>${score}/${questions.length}</strong>
+            </div>
+
+            <div class="result-stat">
+                <span>PERCENTAGE</span>
+                <strong>${percentage}%</strong>
+            </div>
+
+            <div class="result-stat">
+                <span>COMPLETED</span>
+                <strong>${lastResult.date}</strong>
+            </div>
+
+        </div>
+
+        <div class="panel" style="margin-bottom:15px;">
+
+            <div class="panel-header">
+                <h2>Question review</h2>
+                <span>
+                    ${questions.length - score} to review
+                </span>
+            </div>
+
+            <div class="mistakes">
+                ${mistakesHTML}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+function logout() {
+
+    currentUser = null;
+
+    document.getElementById("app").style.display = "none";
+    document.getElementById("loginScreen").style.display = "flex";
+
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+
+    document.getElementById("loginError").style.display = "none";
+
+    currentQuestion = 0;
+    selectedAnswers = new Array(questions.length).fill(null);
+}
+
+</script>
+
+</body>
+</html>
+```
